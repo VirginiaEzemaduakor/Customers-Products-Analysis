@@ -27,6 +27,7 @@ Below are the questions we want to answer for this project.
 ## Database Summary
 
 This project made us of DB Browser for SQLite to handle the databases and were queried with different codes to obtain insights necessary to increase donations.
+
 ![Alt text](image/database_summary.PNG)
  
                
@@ -71,7 +72,7 @@ Priority products for restocking are those with high product performance that ar
 WITH
   prfrm AS (
     SELECT productCode,
-           SUM(quantityOrdered) * 1.0 AS qntOrdr,	        SUM(quantityOrdered * priceEach) AS prod_perf
+           SUM(quantityOrdered) * 1.0 AS qntOrdr, SUM(quantityOrdered * priceEach) AS prod_perf
       FROM orderdetails
      GROUP BY productCode
   ),
