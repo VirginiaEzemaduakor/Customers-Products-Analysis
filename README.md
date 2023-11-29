@@ -21,12 +21,13 @@ Below are the questions we want to answer for this project.
 
 
 ### Schema diagram
-![Alt text](<image/database schema.PNG>)
+![Alt text](image/database_schema.PNG)
+
+
 ## Database Summary
 
 This project made us of DB Browser for SQLite to handle the databases and were queried with different codes to obtain insights necessary to increase donations.
-![Alt text](<image/database summary.PNG>)
-
+![Alt text](image/database_summary.PNG)
  
                
 ## Analysis
@@ -135,8 +136,7 @@ SELECT contactLastName, contactFirstName, city, country, mc.revenue
  ORDER BY mc.revenue DESC
  LIMIT 5;
  ```
- ![Alt text](image/top_5_vip_customer.PNG)
-
+![Alt text](image/top_5_vip_customer.PNG)
 
 #### Top 5 least-engaged customers
 
