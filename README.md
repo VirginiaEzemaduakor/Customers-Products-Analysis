@@ -21,16 +21,11 @@ Below are the questions we want to answer for this project.
 
 
 ### Schema diagram
-
-![fig.1](images/fiq.1.png)
- ![fig.1.1](images/fig.1.1.png)
- 
-
+![Alt text](<image/database schema.PNG>)
 ## Database Summary
 
 This project made us of DB Browser for SQLite to handle the databases and were queried with different codes to obtain insights necessary to increase donations.
-
-![fig.1](images/fiq.1.png)
+![Alt text](<image/database summary.PNG>)
 
  
                
@@ -52,7 +47,7 @@ SELECT productCode,
  ORDER BY low_stock DESC
  LIMIT 10;
 ```
-![fig.2](images/fig.%202.png)
+![Alt text](image/low_stock.PNG)
 
 
 #### Product performance
@@ -66,36 +61,40 @@ SELECT productCode,
  ORDER BY prod_perf DESC
  LIMIT 10;
 ```
-![fig.2](images/fig.%202.png)
+![Alt text](image/product_performance.PNG)
 
-
-#### Priority Products for restocking
+#### Priority products for restocking
 Priority products for restocking are those with high product performance that are on the brink of being out of stock.
 
 ``` 
-WITH 
-
-low_stock_table AS (
-SELECT productCode, 
-       ROUND(SUM(quantityOrdered) * 1.0/(SELECT quantityInStock
-                                           FROM products p
-                                          WHERE od.productCode = p.productCode), 2) AS low_stock
-  FROM orderdetails od
- GROUP BY productCode
- ORDER BY low_stock DESC
- LIMIT 10
-)
-
-SELECT productCode, 
-       SUM(quantityOrdered * priceEach) AS prod_perf
-  FROM orderdetails od
- WHERE productCode IN (SELECT productCode
-                         FROM low_stock_table)
- GROUP BY productCode 
- ORDER BY prod_perf DESC
- LIMIT 10;
+WITH
+  prfrm AS (
+    SELECT productCode,
+           SUM(quantityOrdered) * 1.0 AS qntOrdr,	        SUM(quantityOrdered * priceEach) AS prod_perf
+      FROM orderdetails
+     GROUP BY productCode
+  ),
+  lstk AS (
+    SELECT pr.productCode, 
+	       pr.productName, 
+		   pr.productLine,
+           ROUND(SUM(prfrm.qntOrdr * 1.0) / pr.quantityInstock, 2) AS low_stock
+      FROM products pr
+	  JOIN prfrm
+	    ON pr.productCode = prfrm.productCode
+     GROUP BY pr.productCode
+	 ORDER BY low_stock
+	 LIMIT 10
+  )
+    SELECT lstk.productName, 
+	       lstk.productLine
+	  FROM lstk
+	  JOIN prfrm
+	    ON lstk.productCode = prfrm.productCode
+	 ORDER BY prfrm.prod_perf DESC;
 ```
-![fig.2](images/fig.%202.png)
+![Alt text](image/priority_product_for_restocking.PNG)
+
 
    
 ### 2. **Tailoring marketing and communication strategies to customer behaviors**
@@ -113,8 +112,7 @@ SELECT o.customerNumber, SUM(quantityOrdered * (priceEach - buyPrice)) AS revenu
     ON o.orderNumber = od.orderNumber
  GROUP BY o.customerNumber;
  ``` 
- ![fig.2](images/fig.%202.png)
-
+ 
 
 #### Top 5 VIP customers 
 ```
@@ -137,7 +135,8 @@ SELECT contactLastName, contactFirstName, city, country, mc.revenue
  ORDER BY mc.revenue DESC
  LIMIT 5;
  ```
- ![fig.2](images/fig.%202.png)
+ ![Alt text](image/top_5_vip_customer.PNG)
+
 
 #### Top 5 least-engaged customers
 
@@ -162,14 +161,13 @@ SELECT contactLastName, contactFirstName, city, country, mc.revenue
  LIMIT 5;
  
 ```
-![fig.3](images/fig.%203.png)
+![Alt text](image/top_5_least_engaged_customer.PNG)
 
 
 ### 3. **How much can we spend on acquiring new customers**
-To determine how much money we can spend acquiring new customers, we can compute the Customer Lifetime Value (LTV), which represents the average amount of money a customer generates. We can then determine how much we can spend on marketing.
+To determine how much money we can spend acquiring new customers, we can compute the Customer Lifetime Value (LTV), which represents the average amount of money a customer generates. 
 
 #### Customer lifetime value
-To determine how much money we can spend acquiring new customers, we can compute the Customer Lifetime Value (LTV), which represents the average amount of money a customer generates. 
 
 ```
 WITH 
@@ -188,15 +186,15 @@ SELECT AVG(mc.revenue) AS lyf_tym_val
   FROM money_in_by_customer_table mc;
 
 ```
-![fig. 4](images/fig.%204.png)
+![Alt text](image/ltv.PNG)
 
 
 ## Conclusion
-The conclusion answers the three aims of this project:
+The conclusion conveys the three aims of this project:
 1. *Which products should we order more of or less of?*
 
-   Analysing the query results of comparing low stock with product performance we can see that, 6 out 10 cars belong to 'Classic Cars' product line. They sell frequently with high product performance. As such we should re-stock these frequently.
- 
+   Analysing the query results of comparing low stock with product performance we can see that, 6 out 10 cars belong to 'Classic Cars' product line. They sell frequently with high product performance. As such we should re-stock these frequently. 
+
 2. *How should we tailor marketing and communication strategies to customer behaviors?*
   
      Analysing the query results of top VIP customers and top least-engaged customers in terms of revenu or profit generation,
