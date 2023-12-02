@@ -198,7 +198,7 @@ The conclusion conveys the three aims of this project:
 
 2. *How should we tailor marketing and communication strategies to customer behaviors?*
   
-     Analysing the query results of top VIP customers and top least-engaged customers in terms of revenu or profit generation,
+     Analysing the query results of top VIP customers and top least-engaged customers in terms of revenue or profit generation,
               we need to offer loyalty rewards and priority services for our top VIP customers to retain them.
 			  Also for top least-engaged customers we need to solicit feedback to better understand their preferences, 
 			  expected pricing, discount and offers to increase our sales.
